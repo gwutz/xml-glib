@@ -141,9 +141,13 @@ xml_gobject_deserialize (GType      type,
   xmlNodePtr cur;
 
   n_children = xmlChildElementCount (node);
+#if GLIB_VERSION_2_54
   GValue values[n_children];
   const gchar *names[n_children];
   i = 0;
+#else
+  GArray *construct_params = g_array_sized_new (FALSE, FALSE, sizeof (GParameter), n_members);
+#endif
   for (cur = node->children; cur != NULL; cur = cur->next) {
     GParamSpec *pspec;
 
@@ -154,14 +158,28 @@ xml_gobject_deserialize (GType      type,
     if (!(pspec->flags & G_PARAM_WRITABLE))
       continue;
 
+#if GLIB_VERSION_2_54
     g_value_init (&values[i], G_PARAM_SPEC_VALUE_TYPE (pspec));
 
     xml_deserialize_pspec (&values[i], pspec, cur);
     names[i] = g_strdup ((gchar *)cur->name);
     i += 1;
+#else
+    GParameter parameter = { NULL, };
+    g_value_init (&parameter.value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+
+    xml_deserialize_pspec (&parameter.value, pspec, cur);
+    param.name = g_strdup ((gchar *)cur->name);
+    g_array_append_val (construct_params, parameter);
+#endif
+
   }
 
+#if GLIB_VERSION_2_54
   GObject *obj = g_object_new_with_properties (type, n_children, names, values);
+#else
+  GObject *obj = g_object_newv (type, n_children, parameters);
+#endif
 
   g_type_class_unref (klass);
   return obj;
