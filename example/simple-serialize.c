@@ -12,7 +12,7 @@ test_serialize_simple ()
   xmlNodePtr node = xml_gobject_serialize (G_OBJECT (obj));
 
   g_assert_cmpstr ((gchar *)node->name, ==, "SimpleGobject");
-  char *testdata[] = {"50", "Hello XML1"};
+  char *testdata[] = {"50", "Hello XML"};
   gint i = 0;
   for (cur = node->children; cur != NULL; cur = cur->next)
     {
