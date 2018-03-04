@@ -1,0 +1,97 @@
+/* xml-version.h.in
+ *
+ * Copyright (C) 2018 Günther Wutz
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef XML_GLIB_VERSION_H
+#define XML_GLIB_VERSION_H
+
+#if !defined(XML_GLIB_INSIDE) && !defined(XML_GLIB_COMPILATION)
+# error "Only <xml-glib.h> can be included directly."
+#endif
+
+/**
+ * SECTION:xmlversion
+ * @short_description: xml-glib version checking
+ *
+ * xml-glib provides macros to check the version of the library
+ * at compile-time
+ */
+
+/**
+ * XML_MAJOR_VERSION:
+ *
+ * xml-glib major version component (e.g. 1 if %XML_VERSION is 1.2.3)
+ */
+#define XML_MAJOR_VERSION (@MAJOR_VERSION@)
+
+/**
+ * XML_MINOR_VERSION:
+ *
+ * xml-glib minor version component (e.g. 2 if %XML_VERSION is 1.2.3)
+ */
+#define XML_MINOR_VERSION (@MINOR_VERSION@)
+
+/**
+ * XML_MICRO_VERSION:
+ *
+ * xml-glib micro version component (e.g. 3 if %XML_VERSION is 1.2.3)
+ */
+#define XML_MICRO_VERSION (@MICRO_VERSION@)
+
+/**
+ * XML_VERSION
+ *
+ * xml-glib version.
+ */
+#define XML_VERSION (@VERSION@)
+
+/**
+ * XML_VERSION_S:
+ *
+ * xml-glib version, encoded as a string, useful for printing and
+ * concatenation.
+ */
+#define XML_VERSION_S "@VERSION@"
+
+#define XML_ENCODE_VERSION(major,minor,micro) \
+        ((major) << 24 | (minor) << 16 | (micro) << 8)
+
+/**
+ * XML_VERSION_HEX:
+ *
+ * xml-glib version, encoded as an hexadecimal number, useful for
+ * integer comparisons.
+ */
+#define XML_VERSION_HEX \
+        (XML_ENCODE_VERSION (XML_MAJOR_VERSION, XML_MINOR_VERSION, XML_MICRO_VERSION))
+
+/**
+ * XML_CHECK_VERSION:
+ * @major: required major version
+ * @minor: required minor version
+ * @micro: required micro version
+ *
+ * Compile-time version checking. Evaluates to %TRUE if the version
+ * of xml-glib is greater than the required one.
+ */
+#define XML_CHECK_VERSION(major,minor,micro)   \
+        (XML_MAJOR_VERSION > (major) || \
+         (XML_MAJOR_VERSION == (major) && XML_MINOR_VERSION > (minor)) || \
+         (XML_MAJOR_VERSION == (major) && XML_MINOR_VERSION == (minor) && \
+          XML_MICRO_VERSION >= (micro)))
+
+#endif /* XML_GLIB_VERSION_H */
