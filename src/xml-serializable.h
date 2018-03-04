@@ -22,6 +22,7 @@ struct _XmlSerializableInterface
                                        GValue          *value,
                                        GParamSpec      *pspec,
                                        xmlNodePtr       node);
+  const gchar *(* get_root_name)      (XmlSerializable *serializable);
 };
 
 xmlNodePtr xml_serializable_serialize_property (XmlSerializable *serializable,
@@ -34,4 +35,10 @@ gboolean xml_serializable_deserialize_property (XmlSerializable *serializable,
                                                 GValue          *value,
                                                 GParamSpec      *pspec,
                                                 xmlNodePtr       node);
+xmlNodePtr xml_serializable_default_serialize_property (XmlSerializable *serializable,
+                                                        const gchar     *property_name,
+                                                        const GValue    *value,
+                                                        GParamSpec      *pspec);
+
+const gchar * xml_serializable_get_root_name (XmlSerializable *serializable);
 G_END_DECLS

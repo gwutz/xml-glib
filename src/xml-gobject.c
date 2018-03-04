@@ -93,20 +93,26 @@ xml_gobject_serialize (GObject *gobject)
   GParamSpec **pspecs;
   guint n_pspecs, i;
   gboolean serialize_property = FALSE;
+  gboolean get_root_name = FALSE;
   XmlSerializable *serializable;
   XmlSerializableInterface *iface;
 
   GObjectClass *class = G_OBJECT_GET_CLASS (gobject);
-  root = xmlNewNode (NULL, BAD_CAST G_OBJECT_CLASS_NAME (class));
-
-  pspecs = g_object_class_list_properties (class, &n_pspecs);
-
   if (XML_IS_SERIALIZABLE (gobject))
     {
       serializable = XML_SERIALIZABLE (gobject);
       iface = XML_SERIALIZABLE_GET_IFACE (serializable);
       serialize_property = (iface->serialize_property != NULL);
+      get_root_name = (iface->get_root_name != NULL);
     }
+
+  if (get_root_name)
+    root = xmlNewNode (NULL, BAD_CAST xml_serializable_get_root_name (serializable));
+  else
+    root = xmlNewNode (NULL, BAD_CAST G_OBJECT_CLASS_NAME (class));
+
+  pspecs = g_object_class_list_properties (class, &n_pspecs);
+
 
   for (i = 0; i < n_pspecs; i++)
     {

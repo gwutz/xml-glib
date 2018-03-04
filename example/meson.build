@@ -7,6 +7,7 @@ xml_glib_deps = [
 tests = [
   'simple-serialize',
   'simple-deserialize',
+  'serializable',
 ]
 
 foreach t: tests

@@ -25,6 +25,7 @@ G_BEGIN_DECLS
 #define XML_GLIB_INSIDE
 //# include "xml-version.h"
 # include "xml-gobject.h"
+# include "xml-serializable.h"
 #undef XML_GLIB_INSIDE
 
 G_END_DECLS

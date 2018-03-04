@@ -63,9 +63,36 @@ xml_deserialize_property_real (XmlSerializable *serializable,
   return xml_deserialize_pspec (value, pspec, node);
 }
 
+const gchar *
+xml_serializable_get_root_name (XmlSerializable *serializable)
+{
+  XmlSerializableInterface *iface;
+
+  g_return_val_if_fail (XML_IS_SERIALIZABLE (serializable), G_OBJECT_CLASS_NAME (serializable));
+
+  iface = XML_SERIALIZABLE_GET_IFACE (serializable);
+
+  return iface->get_root_name (serializable);
+}
+
 static void
 xml_serializable_default_init (XmlSerializableInterface *iface)
 {
   iface->serialize_property = xml_serialize_property_real;
   iface->deserialize_property = xml_deserialize_property_real;
+  iface->get_root_name = xml_serializable_get_root_name;
+}
+
+xmlNodePtr
+xml_serializable_default_serialize_property (XmlSerializable *serializable,
+                                             const gchar     *property_name,
+                                             const GValue    *value,
+                                             GParamSpec      *pspec)
+{
+  g_return_val_if_fail (XML_IS_SERIALIZABLE (serializable), NULL);
+  g_return_val_if_fail (property_name != NULL, NULL);
+  g_return_val_if_fail (value != NULL, NULL);
+  g_return_val_if_fail (pspec != NULL, NULL);
+
+  return xml_serialize_property_real (serializable, property_name, value, pspec);
 }
