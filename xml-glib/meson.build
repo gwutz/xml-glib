@@ -44,6 +44,11 @@ xml_glib_lib = shared_library('xml-glib-' + api_version,
   install: true,
 )
 
+xml_glib_dep = declare_dependency(link_with: xml_glib_lib,
+  include_directories: root_dir,
+  dependencies: xml_glib_deps,
+  )
+
 install_headers(xml_glib_headers, subdir: 'xml-glib')
 
 pkg = import('pkgconfig')

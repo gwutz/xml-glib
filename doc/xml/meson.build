@@ -1,0 +1,11 @@
+ent_conf = configuration_data()
+ent_conf.set('PACKAGE', 'XML-GLib')
+ent_conf.set('PACKAGE_BUGREPORT', 'https://bugzilla.gnome.org/enter_bug.cgi?product=json-glib')
+ent_conf.set('PACKAGE_NAME', 'XML-GLib')
+ent_conf.set('PACKAGE_STRING', meson.project_name())
+ent_conf.set('PACKAGE_TARNAME', '@0@-@1@'.format(meson.project_name(), meson.project_version()))
+ent_conf.set('PACKAGE_URL', 'http://wiki.gnome.org/Project/XmlGlib')
+ent_conf.set('PACKAGE_VERSION', meson.project_version())
+ent_conf.set('PACKAGE_API_VERSION', meson.project_version())
+configure_file(input: 'gtkdocentities.ent.in', output: 'gtkdocentities.ent', configuration: ent_conf)
+

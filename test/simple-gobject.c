@@ -127,6 +127,6 @@ simple_gobject_class_init (SimpleGobjectClass *klass)
 }
 
 static void
-simple_gobject_init (SimpleGobject *self)
+simple_gobject_init (G_GNUC_UNUSED SimpleGobject *self)
 {
 }

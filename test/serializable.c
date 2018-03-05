@@ -1,4 +1,5 @@
 #include <glib-object.h>
+#include <glib/gprintf.h>
 #include "xml-glib.h"
 #include "simple-gobject.h"
 
@@ -111,8 +112,8 @@ g_object_serializable_serialze_property (XmlSerializable *serializable,
       gchar *string;
       g_object_get (obj, "integer", &integer, "string", &string, NULL);
       g_sprintf (tmp, "%d", integer);
-      xmlNodePtr c1 = xmlNewDocNode (NULL, NULL, "integer", tmp);
-      xmlNodePtr c2 = xmlNewDocNode (NULL, NULL, "string", string);
+      xmlNodePtr c1 = xmlNewDocNode (NULL, NULL, BAD_CAST "integer", BAD_CAST tmp);
+      xmlNodePtr c2 = xmlNewDocNode (NULL, NULL, BAD_CAST "string", BAD_CAST string);
 
       xmlAddChild (objnode, c1);
       xmlAddChild (objnode, c2);
@@ -163,7 +164,7 @@ test_serializable ()
   xmlDocPtr doc = xmlNewDoc (BAD_CAST "1.0");
   xmlDocSetRootElement (doc, node);
 
-  xmlDocDump (stdout, doc);
+  xmlDocFormatDump (stdout, doc, 1);
 }
 
 int

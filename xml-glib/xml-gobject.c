@@ -71,14 +71,35 @@ xml_deserialize_pspec (GValue     *value,
                        GParamSpec *pspec,
                        xmlNodePtr  node)
 {
-  xmlChar *buf;
-  buf = xmlNodeGetContent (node);
+
+  if (g_type_is_a (G_VALUE_TYPE(value), G_TYPE_OBJECT)) {
+    // TODO how to deserialize objects
+    GObject *obj = xml_gobject_deserialize (G_VALUE_TYPE (value), node);
+    if (obj != NULL)
+      g_value_take_object (value, obj);
+    else
+      g_value_set_object (value, NULL);
+
+    return TRUE;
+  }
+
+  gchar *buf;
+  buf = (gchar *)xmlNodeGetContent (node);
   switch (G_TYPE_FUNDAMENTAL (G_VALUE_TYPE (value))) {
   case G_TYPE_INT:
-    g_value_set_int (value, atoi ((gchar *) buf));
+    g_value_set_int (value, atoi (buf));
+    break;
+  case G_TYPE_INT64:
+    g_value_set_int64 (value, atol (buf));
+    break;
+  case G_TYPE_BOOLEAN:
+    g_value_set_boolean (value, atoi (buf));
+    break;
+  case G_TYPE_DOUBLE:
+    g_value_set_double (value, atof (buf));
     break;
   case G_TYPE_STRING:
-    g_value_set_string (value, g_strdup ((gchar *) buf));
+    g_value_set_string (value, g_strdup (buf));
     break;
   }
 

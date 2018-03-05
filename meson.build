@@ -12,5 +12,9 @@ add_project_arguments([
   '-I' + meson.build_root(),
 ], language: 'c')
 
-subdir('src')
-subdir('example')
+xml_datadir = join_paths(get_option('prefix'), get_option('datadir'))
+root_dir = include_directories('.')
+
+subdir('xml-glib')
+subdir('test')
+subdir('doc')
