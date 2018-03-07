@@ -28,7 +28,7 @@ address_tests = [
 
 foreach t: address_tests
 
-  exe = executable (t, ['@0@.c'.format(t), 'xml-address.c'],
+  exe = executable (t, ['@0@.c'.format(t), 'xml-address.c', 'xml-addresslist.c'],
     link_with: [xml_glib_lib],
     include_directories: [xml_glib_inc],
     dependencies: xml_glib_deps,
@@ -37,17 +37,3 @@ foreach t: address_tests
 
   test(t, exe)
 endforeach
-
-# executable ('simple-serialize', ['simple-serialize.c', 'simple-gobject.c'],
-#   link_with: [xml_glib_lib],
-#   include_directories: [xml_glib_inc],
-#   dependencies: xml_glib_deps,
-#   install: true,
-# )
-
-# executable ('simple-deserialize', ['simple-deserialize.c', 'simple-gobject.c'],
-#   link_with: [xml_glib_lib],
-#   include_directories: [xml_glib_inc],
-#   dependencies: xml_glib_deps,
-#   install: true,
-# )

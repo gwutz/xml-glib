@@ -80,7 +80,6 @@ xml_serializable_default_init (XmlSerializableInterface *iface)
 {
   iface->serialize_property = xml_serialize_property_real;
   iface->deserialize_property = xml_deserialize_property_real;
-  iface->get_root_name = xml_serializable_get_root_name;
 }
 
 xmlNodePtr

@@ -100,8 +100,6 @@ g_object_serializable_serialze_property (XmlSerializable *serializable,
                                          const GValue    *value,
                                          GParamSpec      *pspec)
 {
-  g_print ("%s\n", property_name);
-
   if (g_strcmp0 (property_name, "simple-gobject") == 0)
     {
       SimpleGobject *obj = g_value_get_object (value);
