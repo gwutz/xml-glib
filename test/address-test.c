@@ -2,6 +2,7 @@
 #include "xml-address.h"
 #include "xml-addresslist.h"
 #include "xml-glib.h"
+#include <string.h>
 
 const gchar *address_xml_text =
   "<?xml version=\"1.0\"?>\n"
@@ -43,6 +44,23 @@ test_address_serialization ()
 }
 
 void
+test_address_deserialization ()
+{
+  xmlDocPtr doc = xmlParseMemory (address_xml_text, strlen (address_xml_text));
+  xmlNodePtr node = xmlDocGetRootElement (doc);
+  XmlAddress *address = XML_ADDRESS (xml_gobject_deserialize (XML_TYPE_ADDRESS, node));
+
+  gint housenr;
+  gchar *streetname;
+  gchar *city;
+  g_object_get (G_OBJECT (address), "house-number", &housenr, "street-name", &streetname, "city", &city, NULL);
+
+  g_assert_cmpint (housenr, ==, 4);
+  g_assert_cmpstr (streetname, ==, "Rohini");
+  g_assert_cmpstr (city, ==, "Delhi");
+}
+
+void
 test_addresslist_serialization ()
 {
   XmlAddresslist *list = xml_addresslist_new ();
@@ -71,6 +89,7 @@ main (gint   argc,
 
   g_test_add_func ("/xml/address/serialization", test_address_serialization);
   g_test_add_func ("/xml/addresslist/serialization", test_addresslist_serialization);
+  g_test_add_func ("/xml/address/deserialization", test_address_deserialization);
 
   return g_test_run ();
 }
