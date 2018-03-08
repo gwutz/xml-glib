@@ -39,8 +39,6 @@ enum {
   N_PROPS
 };
 
-static GParamSpec *properties [N_PROPS];
-
 XmlAddresslist *
 xml_addresslist_new (void)
 {
