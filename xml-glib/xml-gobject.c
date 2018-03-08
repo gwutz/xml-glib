@@ -205,6 +205,9 @@ xml_gobject_deserialize (GType      type,
   for (cur = node->children; cur != NULL; cur = cur->next) {
     GParamSpec *pspec;
 
+    if (cur->type != XML_ELEMENT_NODE)
+      continue;
+
     pspec = g_object_class_find_property (klass, (gchar *)cur->name);
     if (!pspec)
       continue;

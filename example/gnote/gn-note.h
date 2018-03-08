@@ -1,6 +1,6 @@
-/* xml-glib.h
+/* gn-note.h
  *
- * Copyright (C) 2018 Günther Wutz
+ * Copyright 2018 Günther Wutz <info@gunibert.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,18 +14,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define XML_GLIB_INSIDE
-# include "xml-glib-version.h"
-# include "xml-gobject.h"
-# include "xml-serializable.h"
-#undef XML_GLIB_INSIDE
+#define GN_TYPE_NOTE (gn_note_get_type())
+
+G_DECLARE_FINAL_TYPE (GnNote, gn_note, GN, NOTE, GObject)
+
+GnNote *gn_note_new (void);
 
 G_END_DECLS
