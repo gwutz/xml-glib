@@ -153,6 +153,15 @@ g_object_serializable_init (GObjectSerializable *self)
 {
 }
 
+gchar *xmltext =
+  "<?xml version=\"1.0\"?>\n"
+  "<TestObject>\n"
+  "  <child>\n"
+  "    <integer>100</integer>\n"
+  "    <string>Serialize Example</string>\n"
+  "  </child>\n"
+  "</TestObject>\n";
+
 void
 test_serializable ()
 {
@@ -162,7 +171,11 @@ test_serializable ()
   xmlDocPtr doc = xmlNewDoc (BAD_CAST "1.0");
   xmlDocSetRootElement (doc, node);
 
-  xmlDocFormatDump (stdout, doc, 1);
+  xmlChar *memorydump;
+
+  xmlDocDumpFormatMemory (doc, &memorydump, NULL, 1);
+
+  g_assert_cmpstr ((gchar *) memorydump, ==, xmltext);
 }
 
 int

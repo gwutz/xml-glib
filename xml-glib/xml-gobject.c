@@ -22,6 +22,14 @@
 #include <glib/gprintf.h>
 #include "xml-serializable.h"
 
+/**
+ * SECTION:xml-gobject
+ * @short_description: Woast scho kurze Erklärung
+ * @title: GObject Serialization
+ *
+ * Hier kommt die lange Erklärung für Serialisierung von GObjects
+ */
+
 xmlNodePtr
 xml_serialize_pspec (GParamSpec   *pspec,
                      const GValue *real_value)
@@ -107,6 +115,15 @@ xml_deserialize_pspec (GValue     *value,
   return TRUE;
 }
 
+/**
+ * xml_gobject_serialize:
+ * @gobject: a #GObject
+ *
+ * Serializes an GObject to an xml Tree. Each Node will represent an readable
+ * Property of the GObject.
+ *
+ * Returns: (transfer full): an xmlNodePtr
+ */
 xmlNodePtr
 xml_gobject_serialize (GObject *gobject)
 {
@@ -157,6 +174,13 @@ xml_gobject_serialize (GObject *gobject)
   return root;
 }
 
+/**
+ * xml_gobject_deserialize:
+ *
+ * Test
+ *
+ * Returns: the deserialized GObject
+ */
 GObject *
 xml_gobject_deserialize (GType      type,
                          xmlNodePtr node)
