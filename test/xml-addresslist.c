@@ -117,8 +117,7 @@ xml_addresslist_serialize_property (XmlSerializable *serializable,
 {
   if (g_strcmp0 (property_name, "addresses") == 0) {
     GPtrArray *arr = g_value_get_boxed (value);
-    //xmlNodePtr root = xmlNewNode (NULL, property_name);
-    xmlNodePtr first;
+    xmlNodePtr first = NULL;
 
     for (int i = 0; i < arr->len; i++) {
       XmlAddress *a = g_ptr_array_index (arr, i);
