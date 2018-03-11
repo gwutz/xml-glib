@@ -31,15 +31,45 @@ gchar *notexml =
 "    </note-content>\n"
 "  </text>\n"
 "  <last-change-date>2017-11-16T21:34:41.979417Z</last-change-date>\n"
+"  <last-metadata-change-date>2017-11-16T21:34:41.892018Z</last-metadata-change-date>\n"
+"  <create-date>2017-11-06T18:07:02.374252Z</create-date>\n"
 "</note>\n";
 
 gint
 main (gint argc, gchar *argv[])
 {
-  xmlDocPtr doc = xmlParseMemory (notexml, strlen (notexml));
-  xmlNodePtr node = xmlDocGetRootElement (doc);
+  const gchar *entry;
+  GError *error = NULL;
+  g_autofree gchar *gnotedir;
 
-  GObject *obj = xml_gobject_deserialize (GN_TYPE_NOTE, node);
-  GnNote *note = GN_NOTE (obj);
+  if (argc > 1) {
+    gnotedir = g_strdup (argv[1]);
+  } else {
+    gnotedir = g_build_path ("/", g_get_home_dir (), ".local/share/gnote/", NULL);
+  }
+
+  GDir *dir = g_dir_open (gnotedir, 0, &error);
+  if (error != NULL) {
+    g_error ("%s", error->message);
+  }
+
+  for (entry = g_dir_read_name (dir); entry != NULL; entry = g_dir_read_name (dir))
+    {
+      if (!g_str_has_suffix (entry, ".note")) {
+        continue;
+      }
+
+      g_autofree gchar *notefile = g_build_path ("/", gnotedir, entry, NULL);
+      xmlDocPtr doc = xmlParseFile (notefile);
+      xmlNodePtr node = xmlDocGetRootElement (doc);
+
+      GObject *obj = xml_gobject_deserialize (GN_TYPE_NOTE, node);
+      GnNote *note = GN_NOTE (obj);
+
+      g_print ("-------------------------------\nTitle: %s\n\n%s\n", gn_note_get_title (note), gn_note_get_text (note));
+    }
+
+  g_dir_close (dir);
+
   return 0;
 }

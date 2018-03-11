@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GnText, gn_text, GN, TEXT, GObject)
 
-GnText *gn_text_new (void);
+GnText *gn_text_new (gchar *content);
+gchar  *gn_text_get_content (GnText *self);
 
 G_END_DECLS

@@ -29,5 +29,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GnNote, gn_note, GN, NOTE, GObject)
 
 GnNote *gn_note_new (void);
-
+gchar  *gn_note_get_title (GnNote *self);
+gchar  *gn_note_get_text  (GnNote *self);
 G_END_DECLS

@@ -38,15 +38,19 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 GnText *
-gn_text_new (void)
+gn_text_new (gchar *content)
 {
-  return g_object_new (GN_TYPE_TEXT, NULL);
+  return g_object_new (GN_TYPE_TEXT,
+                       "note-content", content,
+                       NULL);
 }
 
 static void
 gn_text_finalize (GObject *object)
 {
   GnText *self = (GnText *)object;
+
+  g_free (self->notecontent);
 
   G_OBJECT_CLASS (gn_text_parent_class)->finalize (object);
 }
@@ -113,4 +117,10 @@ gn_text_class_init (GnTextClass *klass)
 static void
 gn_text_init (GnText *self)
 {
+}
+
+gchar *
+gn_text_get_content (GnText *self)
+{
+  return self->notecontent;
 }

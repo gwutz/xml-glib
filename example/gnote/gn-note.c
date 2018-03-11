@@ -28,6 +28,8 @@ struct _GnNote
   gchar *title;
   GnText *text;
   gchar *last_change_date;
+  gchar *last_metadata_change_date;
+  gchar *create_date;
 
 };
 
@@ -38,6 +40,8 @@ enum {
   PROP_TITLE,
   PROP_TEXT,
   PROP_LAST_CHANGE_DATE,
+  PROP_LAST_METADATA_CHANGE_DATE,
+  PROP_CREATE_DATE,
   N_PROPS
 };
 
@@ -53,6 +57,12 @@ static void
 gn_note_finalize (GObject *object)
 {
   GnNote *self = (GnNote *)object;
+
+  g_free (self->title);
+  g_clear_object (&self->text);
+  g_free (self->last_change_date);
+  g_free (self->last_metadata_change_date);
+  g_free (self->create_date);
 
   G_OBJECT_CLASS (gn_note_parent_class)->finalize (object);
 }
@@ -75,6 +85,12 @@ gn_note_get_property (GObject    *object,
       break;
     case PROP_LAST_CHANGE_DATE:
       g_value_set_string (value, self->last_change_date);
+      break;
+    case PROP_LAST_METADATA_CHANGE_DATE:
+      g_value_set_string (value, self->last_metadata_change_date);
+      break;
+    case PROP_CREATE_DATE:
+      g_value_set_string (value, self->create_date);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -102,6 +118,14 @@ gn_note_set_property (GObject      *object,
     case PROP_LAST_CHANGE_DATE:
       g_free (self->last_change_date);
       self->last_change_date = g_value_dup_string (value);
+      break;
+    case PROP_LAST_METADATA_CHANGE_DATE:
+      g_free (self->last_metadata_change_date);
+      self->last_metadata_change_date = g_value_dup_string (value);
+      break;
+    case PROP_CREATE_DATE:
+      g_free (self->create_date);
+      self->create_date = g_value_dup_string (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -140,10 +164,38 @@ gn_note_class_init (GnNoteClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_LAST_METADATA_CHANGE_DATE] =
+    g_param_spec_string ("last-metadata-change-date",
+                         "LastMetadataChangeDate",
+                         "LastMetadataChangeDate",
+                         "",
+                         (G_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_CREATE_DATE] =
+    g_param_spec_string ("create-date",
+                         "CreateDate",
+                         "CreateDate",
+                         "",
+                         (G_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
 gn_note_init (GnNote *self)
 {
+}
+
+gchar *
+gn_note_get_title (GnNote *self)
+{
+  return self->title;
+}
+
+gchar *
+gn_note_get_text  (GnNote *self)
+{
+  return gn_text_get_content (self->text);
 }
