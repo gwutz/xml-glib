@@ -30,7 +30,10 @@ GObjectSerializable *
 g_object_serializable_new (void)
 {
   SimpleGobject *child = simple_gobject_new (100, "Serialize Example");
-  return g_object_new (G_OBJECT_TYPE_SERIALIZABLE, "simple-gobject", child, NULL);
+  GObjectSerializable *ret = (GObjectSerializable *) g_object_new (G_OBJECT_TYPE_SERIALIZABLE, "simple-gobject", child, NULL);
+
+  g_object_unref (child);
+  return ret;
 }
 
 static void
@@ -73,7 +76,7 @@ g_object_serializable_set_property (GObject      *object,
     {
     case PROP_SIMPLE_GOBJECT:
       g_clear_object (&self->obj);
-      self->obj = g_value_get_object (value);
+      self->obj = g_value_dup_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -107,7 +110,7 @@ g_object_serializable_serialze_property (XmlSerializable *serializable,
       xmlNodePtr objnode = xmlNewNode (NULL, BAD_CAST "child");
 
       gint integer;
-      gchar *string;
+      g_autofree gchar *string;
       g_object_get (obj, "integer", &integer, "string", &string, NULL);
       g_sprintf (tmp, "%d", integer);
       xmlNodePtr c1 = xmlNewDocNode (NULL, NULL, BAD_CAST "integer", BAD_CAST tmp);
@@ -176,6 +179,10 @@ test_serializable ()
   xmlDocDumpFormatMemory (doc, &memorydump, NULL, 1);
 
   g_assert_cmpstr ((gchar *) memorydump, ==, xmltext);
+
+  xmlFree (memorydump);
+  xmlFreeDoc (doc);
+  g_object_unref (obj);
 }
 
 int

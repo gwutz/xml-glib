@@ -21,11 +21,14 @@ test_deserialize_simple ()
   g_assert (obj != NULL);
 
   gint integer;
-  gchar *string;
+  g_autofree gchar *string;
   g_object_get (obj, "integer", &integer, "string", &string, NULL);
 
   g_assert_cmpint (integer, ==, 50);
   g_assert_cmpstr (string, ==, "Hello XML");
+
+  g_object_unref (obj);
+  xmlFreeDoc (doc);
 }
 
 int

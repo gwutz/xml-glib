@@ -11,6 +11,8 @@ test_serialize_simple ()
 
   xmlNodePtr node = xml_gobject_serialize (G_OBJECT (obj));
 
+  g_object_unref (obj);
+
   g_assert_cmpstr ((gchar *)node->name, ==, "SimpleGobject");
   char *testdata[] = {"50", "Hello XML", NULL};
   gint i = 0;
@@ -19,7 +21,11 @@ test_serialize_simple ()
       xmlChar *content = xmlNodeGetContent (cur);
 
       g_assert_cmpstr ((gchar *)content, ==, testdata[i]);
+
+      xmlFree (content);
     }
+
+  xmlFreeNode (node);
 }
 
 int

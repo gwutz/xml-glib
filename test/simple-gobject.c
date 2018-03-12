@@ -72,7 +72,7 @@ simple_gobject_get_property (GObject    *object,
       g_value_set_int (value, self->integer);
       break;
     case PROP_STRING:
-      g_value_set_string (value, g_strdup (self->string));
+      g_value_set_string (value, self->string);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -93,6 +93,7 @@ simple_gobject_set_property (GObject      *object,
       self->integer = g_value_get_int (value);
       break;
     case PROP_STRING:
+      g_free (self->string);
       self->string = g_value_dup_string (value);
       break;
     default:

@@ -41,6 +41,10 @@ test_address_serialization ()
   xmlDocDumpFormatMemory (doc, &memorydump, NULL, 1);
 
   g_assert_cmpstr ((gchar *)memorydump, ==, address_xml_text);
+
+  xmlFree (memorydump);
+  xmlFreeDoc (doc);
+  g_object_unref (address);
 }
 
 void
@@ -51,13 +55,16 @@ test_address_deserialization ()
   XmlAddress *address = XML_ADDRESS (xml_gobject_deserialize (XML_TYPE_ADDRESS, node));
 
   gint housenr;
-  gchar *streetname;
-  gchar *city;
+  g_autofree gchar *streetname;
+  g_autofree gchar *city;
   g_object_get (G_OBJECT (address), "house-number", &housenr, "street-name", &streetname, "city", &city, NULL);
 
   g_assert_cmpint (housenr, ==, 4);
   g_assert_cmpstr (streetname, ==, "Rohini");
   g_assert_cmpstr (city, ==, "Delhi");
+
+  xmlFreeDoc (doc);
+  g_object_unref (address);
 }
 
 void
@@ -79,6 +86,11 @@ test_addresslist_serialization ()
   xmlDocDumpFormatMemory (doc, &memorydump, NULL, 1);
 
   g_assert_cmpstr ((gchar *) memorydump, ==, addresslist_xml_text);
+
+  xmlFree (memorydump);
+  xmlFreeDoc (doc);
+
+  g_object_unref (list);
 }
 
 gint
